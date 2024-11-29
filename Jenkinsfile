@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Verificar Repositorio') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/victor']], useRemoteConfigs:[[url: 'https://github.com/danielasegadilha/rabbitmq-receptor.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], useRemoteConfigs:[[url: 'https://github.com/danielasegadilha/rabbitmq-receptor.git']]])
             }
         }
 
