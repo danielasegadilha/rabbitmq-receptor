@@ -1,25 +1,16 @@
 pipeline {
     agent any
-
-    environment {
-        // Definindo as ferramentas Maven e JDK no Jenkins
-        MAVEN_HOME = tool name: 'Maven 3.8.1', type: 'ToolLocation'
-        JAVA_HOME = tool name: 'JDK 17', type: 'ToolLocation'  // JDK 17, conforme mencionado anteriormente
-    }
-
     stages {
-        stage('Verificar Repositório') {
+        stage('Verificar Repositorio') {
             steps {
-                // Fazendo o checkout do repositório Git
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], useRemoteConfigs:[[url: 'https://github.com/danielasegadilha/springboot-carrinho-de-compra.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/victor']], useRemoteConfigs:[[url: 'https://github.com/danielasegadilha/rabbitmq-receptor.git']]])
             }
         }
 
-        stage('Construir o Projeto (Maven)') {
+        stage('Instalar Dependencias e Build') {
             steps {
                 script {
-                    // Realizando o build do projeto com Maven, sem testes
-                    bat "\"${MAVEN_HOME}\\bin\\mvn\" clean package -DskipTests"
+                    bat 'mvn clean install -DskipTests'
                 }
             }
         }
@@ -27,38 +18,25 @@ pipeline {
         stage('Construir Imagem Docker') {
             steps {
                 script {
-                    def appName = 'springboot-carrinho-de-compra'
-                    def imageTag = "${appName}:${env.BUILD_ID}"
-
-                    // Construir a imagem Docker
-                    bat "docker build -t ${imageTag} ."
+                    def appName = 'rabbitmq-receptor'
+                    def imageTag = "${appName}:${env.BUILD_ID}"  // Usando o BUILD_ID do Jenkins como tag da imagem Docker
+                    bat "docker build -t ${imageTag} -f Dockerfile ."
                 }
             }
         }
 
-        stage('Fazer Deploy Docker') {
+        stage('Fazer Deploy') {
             steps {
                 script {
-                    def appName = 'springboot-carrinho-de-compra'
+                    def appName = 'rabbitmq-receptor'
                     def imageTag = "${appName}:${env.BUILD_ID}"
 
-                    // Parar e remover o container existente, se houver
                     bat "docker stop ${appName} || exit 0"
-                    bat "docker rm ${appName} || exit 0"
+                    bat "docker rm ${appName}  || exit 0"
 
-                    // Executar o novo container
-                    bat "docker run -d --name ${appName} -p 8080:8080 ${imageTag}"
+                    bat "docker run -d --name ${appName} -p 8081:8081 ${imageTag}"
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deploy realizado com sucesso!'
-        }
-        failure {
-            echo 'Houve um erro durante o deploy.'
         }
     }
 }
