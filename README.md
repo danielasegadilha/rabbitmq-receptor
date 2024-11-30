@@ -8,8 +8,11 @@ Este projeto é o receptor da fila RabbitMQ, responsável por gerenciar as requi
 |-----------------|-----------------------------------------------------|
 | 🐇 RabbitMQ     | Sistema de mensageria usado para gerenciar as filas de requisições. |
 | 💻 Java         | Linguagem de programação usada para implementar o receptor. |
-| 🗃 Banco de Dados | Banco de dados onde as multas são armazenadas e deletadas. |
-| 🧩 Spring Boot  | Framework usado para criar a aplicação backend. |
+| 🧩 Spring Boot  | Framework utilizado para construir a aplicação backend. |
+| 🗃 MySQL        | Banco de dados relacional usado para armazenar as multas. |
+| 🔄 Hibernate    | Framework ORM para mapear as entidades Java para o MySQL. |
+| 🐳 Docker       | Contêinerização da aplicação para facilitar a implantação. |
+| 🏗 Jenkins      | Integração contínua e automação de builds. |
 
 ## ⚙ Funcionalidades
 
